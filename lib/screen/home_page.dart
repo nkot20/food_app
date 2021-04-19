@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:food_app2/helper/constants.dart';
+import 'package:food_app2/helper/helperfunction.dart';
 import 'package:food_app2/screen/login_page.dart';
+import 'package:food_app2/services/auth.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -7,6 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  AuthMethods authMethods = new AuthMethods();
   Widget categoriesContainer({@required String image, @required String title}) {
     return Column(
       children: [
@@ -112,6 +116,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    getUserInfo();
+  }
+
+  getUserInfo() async {
+    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
+    Constants.myEmail = await HelperFunctions.getUserEmailSharedPreference();
+    Constants.numberUser =
+        await HelperFunctions.getUserNumberSharedPreference();
+    Constants.myLastName =
+        await HelperFunctions.getUserLastNameSharedPreference();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
@@ -130,8 +148,8 @@ class _HomePageState extends State<HomePage> {
                     currentAccountPicture: CircleAvatar(
                       backgroundImage: AssetImage('images/pp.jpg'),
                     ),
-                    accountName: Text("Coco"),
-                    accountEmail: Text("etiennenkot1@gmail.com")),
+                    accountName: Text(Constants.myName + Constants.myLastName),
+                    accountEmail: Text(Constants.myEmail)),
                 drawerItem(name: "Profile", icon: Icons.person, onTap: null),
                 drawerItem(
                     name: "Panier", icon: Icons.add_shopping_cart, onTap: null),
@@ -153,6 +171,8 @@ class _HomePageState extends State<HomePage> {
                     name: "Déconnection",
                     icon: Icons.exit_to_app,
                     onTap: () {
+                      HelperFunctions.saveUserLoggedInSharedPreference(false);
+                      authMethods.signOut();
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) => LoginPage()));
                     }),
@@ -193,6 +213,11 @@ class _HomePageState extends State<HomePage> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
+                categoriesContainer(image: "images/eru.jpg", title: "Toutes"),
+                categoriesContainer(image: "images/ndole.jpg", title: "Ndoles"),
+                categoriesContainer(image: "images/okok.png", title: "Okok"),
+                categoriesContainer(
+                    image: "images/pouletDg.jpg", title: "Poulet"),
                 categoriesContainer(image: "images/eru.jpg", title: "Toutes"),
                 categoriesContainer(image: "images/ndole.jpg", title: "Ndoles"),
                 categoriesContainer(image: "images/okok.png", title: "Okok"),
