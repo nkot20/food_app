@@ -10,7 +10,7 @@ import 'package:food_app2/widget/text_field.dart';
 class SignUp extends StatefulWidget {
   static Pattern pattern =
       r'^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$';
-  static Pattern number = r'^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$';
+  static Pattern number = r'^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$';
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -48,8 +48,8 @@ class _SignUpState extends State<SignUp> {
           .showSnackBar(SnackBar(content: Text("L'email n'est pas valide")));
       return;
     } else if (!regExp.hasMatch(email.text)) {
-      globalKey.currentState
-          .showSnackBar(SnackBar(content: Text("L'email n'est pas correcte ")));
+      globalKey.currentState.showSnackBar(
+          SnackBar(content: Text("Le format de l'email n'est pas correcte ")));
       return;
     }
 
@@ -59,7 +59,7 @@ class _SignUpState extends State<SignUp> {
       return;
     } else if (!regExpNumber.hasMatch(number.text)) {
       globalKey.currentState.showSnackBar(
-          SnackBar(content: Text("Le numéro n'est pas correcte ")));
+          SnackBar(content: Text("Le format du numéro n'est pas correct")));
       return;
     }
 
@@ -81,10 +81,6 @@ class _SignUpState extends State<SignUp> {
         number.text.trim().isNotEmpty &&
         email.text.trim() != null &&
         regExpNumber.hasMatch(number.text)) {
-      HelperFunctions.saveUserEmailSharedPreference(email.text);
-      HelperFunctions.saveUserNameSharedPreference(firstName.text);
-      HelperFunctions.saveUserLastNameSharedPreference(lastName.text);
-      HelperFunctions.saveUserNumberSharedPreference(number.text);
       signUpMe();
     }
   }
@@ -105,11 +101,16 @@ class _SignUpState extends State<SignUp> {
       if (currentUser.email != null) {
         databaseMethods.uploadUserInfo(userInfoMap);
         HelperFunctions.saveUserLoggedInSharedPreference(true);
+        HelperFunctions.saveUserEmailSharedPreference(email.text);
+        HelperFunctions.saveUserNameSharedPreference(firstName.text);
+        HelperFunctions.saveUserLastNameSharedPreference(lastName.text);
+        HelperFunctions.saveUserNumberSharedPreference(number.text);
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomePage()));
         //sendVerificationEmail(user);
       } else {
-        alreadyEmail = "Email is already exist";
+        globalKey.currentState.showSnackBar(SnackBar(
+            content: Text("L'adresse email existe déja. Connectez-vous")));
       }
     });
   }
@@ -149,7 +150,7 @@ class _SignUpState extends State<SignUp> {
                       controller: lastName,
                     ),
                     MyTextField(
-                      hintText: "Numéro de téléphone",
+                      hintText: "Numéro de téléphone _ _ _-_ _ _-_ _ _",
                       obscureText: false,
                       controller: number,
                     ),

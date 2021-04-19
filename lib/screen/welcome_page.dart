@@ -25,14 +25,11 @@ class WelcomePage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-              child: Container(
-            child: Center(
-              child: Text(
-                "LOGO",
-                style: TextStyle(fontSize: 50),
-              ),
+            child: CircleAvatar(
+              radius: 60,
+              backgroundImage: AssetImage("ndole.jpg"),
             ),
-          )),
+          ),
           Expanded(
               child: Container(
             child: Column(
@@ -40,7 +37,7 @@ class WelcomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Bienvenu à ...",
+                  "Bienvenu à KamTraiteurServices",
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

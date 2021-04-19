@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app2/helper/helperfunction.dart';
 import 'package:food_app2/screen/home_page.dart';
+import 'package:food_app2/screen/sign_up_page.dart';
 import 'package:food_app2/services/auth.dart';
 import 'package:food_app2/services/database.dart';
 
@@ -147,8 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
                 onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
+                  validation();
                 },
                 child: Text(
                   "CONNECTION",
@@ -163,7 +163,8 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(color: Colors.grey)),
                 GestureDetector(
                     onTap: () {
-                      validation();
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => SignUp()));
                     },
                     child: Text("S'inscrire. ",
                         style: TextStyle(color: Colors.red)))
